@@ -13,10 +13,9 @@ def main():
 
     # OBV analysis
     obv_df = pd.DataFrame(columns=["OBV"])
-    timeframe = 10 # number of days until present to look at
+    timeframe = 10 # number of days to look at
 
-    for stock, df in stocks.items():
-        # TODO: normalize stock splits (if not already)
+    for stock, df in histories.items():
         obv = (np.sign(df['Close'].diff()) * df['Volume']).cumsum().to_numpy()[-1]
         obv_df.loc[stock] = obv
 
