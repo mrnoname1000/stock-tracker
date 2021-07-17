@@ -7,32 +7,9 @@ import yfinance as yf
 from get_all_tickers import get_tickers as gt
 
 def main():
-    tickers = gt.get_tickers_filtered(mktcap_min=150000, mktcap_max=10000000)
-    #tickers = ["GOOGL"]
-
-    stocks = {}
-
-    api_rate_limit = 2000 / 60 / 60
-    api_call_count = 0
-
-    for stock in tickers:
-        if api_call_count > 1800:
-            break
-
-        for _ in range(5):
-            try:
-                ticker = yf.Ticker(stock)
-            except ValueError:
-                pass
-            else:
-                break
-
-        stocks[stock] = ticker.history(period="max")
-        print(ticker)
-
-        api_call_count += 1
-
-        time.sleep(api_rate_limit)
+    stocks = gt.get_tickers_filtered(mktcap_min=50000)
+    tickers = yf.Tickers(stocks).tickers
+    histories = {stock: ticker.history(period="max") for stock, ticker in tickers.items()}
 
     # OBV analysis
     obv_df = pd.DataFrame(columns=["OBV"])
