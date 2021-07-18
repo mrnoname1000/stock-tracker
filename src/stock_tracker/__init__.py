@@ -19,13 +19,12 @@ def main():
         mktcap_max=opts.market_cap_max,
     )
     tickers = yf.Tickers(stocks).tickers
-    histories = {stock: ticker.history(period=opts.period) for stock, ticker in tickers.items()}
 
     # OBV analysis
     obv_df = pd.DataFrame(columns=["OBV"])
 
-    for stock, df in histories.items():
-        obv_df.loc[stock] = data.obv(df)
+    for stock, df in tickers.items():
+        obv_df.loc[stock] = data.obv(df.history(period=opts.period))
 
     obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
     obv_df.sort_values("OBV", inplace=True, ascending=False)
