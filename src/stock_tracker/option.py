@@ -37,19 +37,14 @@ def build_parser():
     )
 
     date_values = ("1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max")
-    def period(string):
-        if string not in date_values:
-            raise ValueError
-        return string
 
     parser.add_argument(
         "--period",
         action="store",
+        choices=date_values,
         default="max",
-        type=period,
         help=textwrap.dedent(f"""\
             period of dates to consider
-            valid periods: {', '.join(date_values)}
             default: %(default)s
         """),
     )
