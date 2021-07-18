@@ -1,4 +1,3 @@
-import time
 
 import numpy as np
 import pandas as pd
@@ -13,10 +12,9 @@ def main():
 
     # OBV analysis
     obv_df = pd.DataFrame(columns=["OBV"])
-    timeframe = 10 # number of days to look at
 
     for stock, df in histories.items():
-        obv = (np.sign(df['Close'].diff()) * df['Volume']).cumsum().to_numpy()[-1]
+        obv = (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().to_numpy()[-1]
         obv_df.loc[stock] = obv
 
     obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
