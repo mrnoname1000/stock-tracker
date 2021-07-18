@@ -1,3 +1,5 @@
+import textwrap
+import math
 
 import numpy as np
 import pandas as pd
@@ -19,6 +21,21 @@ def main():
 
     obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
     obv_df.sort_values("OBV", inplace=True, ascending=False)
-    print(obv_df)
+
+    cutcount = min(10, len(obv_df.index) / 2)
+    print(textwrap.dedent(f"""
+        Subject: Daily Stock Report
+
+        Your highest ranked OBV stocks of the day:
+
+        {' '.join(obv_df.head(math.ceil(cutcount)).index.values)}
+
+        Your lowest ranked OBV stocks of the day:
+
+        {' '.join(obv_df.tail(math.floor(cutcount)).index.values[::-1])}
+
+        Sincerely,
+        Your Computer
+    """.strip("\n")))
 
     return 0
