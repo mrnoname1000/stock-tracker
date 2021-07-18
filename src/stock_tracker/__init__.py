@@ -7,10 +7,18 @@ import yfinance as yf
 
 from get_all_tickers import get_tickers as gt
 
+from . import option
+
 def main():
-    stocks = gt.get_tickers_filtered(mktcap_min=50000)
+    parser = option.build_parser()
+    opts = parser.parse_args()
+
+    stocks = gt.get_tickers_filtered(
+        mktcap_min=opts.market_cap_min,
+        mktcap_max=opts.market_cap_max,
+    )
     tickers = yf.Tickers(stocks).tickers
-    histories = {stock: ticker.history(period="max") for stock, ticker in tickers.items()}
+    histories = {stock: ticker.history(period=opts.period) for stock, ticker in tickers.items()}
 
     # OBV analysis
     obv_df = pd.DataFrame(columns=["OBV"])
