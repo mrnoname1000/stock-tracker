@@ -7,7 +7,8 @@ import yfinance as yf
 
 from get_all_tickers import get_tickers as gt
 
-from . import option
+from . import option, data
+
 
 def main():
     parser = option.build_parser()
@@ -24,8 +25,7 @@ def main():
     obv_df = pd.DataFrame(columns=["OBV"])
 
     for stock, df in histories.items():
-        obv = (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().to_numpy()[-1]
-        obv_df.loc[stock] = obv
+        obv_df.loc[stock] = data.obv(df)
 
     obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
     obv_df.sort_values("OBV", inplace=True, ascending=False)
