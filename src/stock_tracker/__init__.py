@@ -43,6 +43,6 @@ def main():
 
         Sincerely,
         Your Computer
-    """.strip("\n")))
+    """).strip("\n"))
 
     return 0
