@@ -15,6 +15,13 @@ def build_parser():
     )
 
     parser.add_argument(
+        "stocks",
+        metavar="STOCK",
+        nargs="*",
+        help="manually specify stocks to search",
+    )
+
+    parser.add_argument(
         "--market-cap-min",
         action="store",
         default=50000,
