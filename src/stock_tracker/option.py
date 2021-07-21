@@ -29,9 +29,7 @@ def positive_int(i):
 
 
 def build_parser():
-    # TODO: create custom help formatter
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawTextHelpFormatter,
         description="Rank stocks based on various factors",
     )
 
@@ -48,12 +46,7 @@ def build_parser():
         action="store",
         default=50000,
         type=int,
-        help=textwrap.dedent(
-            """
-            Minimum market cap to search
-            default: %(default)s
-            """
-        ).strip("\n"),
+        help="Minimum market cap to search (default: %(default)s)",
     )
 
     parser.add_argument(
@@ -62,12 +55,7 @@ def build_parser():
         action="store",
         default=None,
         type=positive_int,
-        help=textwrap.dedent(
-            """
-            Maximum market cap to search
-            default: none
-            """
-        ).strip("\n"),
+        help="Maximum market cap to search (default: %(default)s)",
     )
 
     parser.add_argument(
@@ -75,23 +63,14 @@ def build_parser():
         action="store",
         type=period,
         default="1mo",
-        help=textwrap.dedent(
-            f"""
-            Period of dates to consider (e.g. 5d, 6mo, 10y, ytd, max)
-            default: %(default)s
-            """
-        ).strip("\n"),
+        help="Period of dates to consider (e.g. 5d, 6mo, 10y, ytd, max) (default: %(default)s)",
     )
 
     parser.add_argument(
         "--lookup",
         action=argparse.BooleanOptionalAction,
-        help=textwrap.dedent(
-            """
-            Look up stocks based on market cap
-            default: no (unless no stocks are specified)
-            """
-        ).strip("\n"),
+        default=False,
+        help="Look up stocks based on market cap",
     )
 
     parser.add_argument(
