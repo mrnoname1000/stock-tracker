@@ -22,7 +22,6 @@ def main():
 
     # stock analysis
     columns = [
-        "OBV",
         "earningsQuarterlyGrowth",
         "revenueQuarterlyGrowth",
     ]
@@ -30,7 +29,6 @@ def main():
 
     for ticker in tickers:
         df.loc[ticker.ticker] = [
-            data.obv(ticker, period=opts.period, interval=opts.interval)
             ticker.info["earningsQuarterlyGrowth"],
             # revenueGrowth seems to be quarterly revenue growth
             ticker.info["revenueGrowth"],
