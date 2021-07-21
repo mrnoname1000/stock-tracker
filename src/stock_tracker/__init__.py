@@ -21,16 +21,27 @@ def main():
         )
     tickers = yf.Tickers(opts.stocks).tickers.values()
 
-    # OBV analysis
-    obv_df = pd.DataFrame(columns=["OBV"])
+    # stock analysis
+    columns = [
+        "OBV",
+    ]
+    df = pd.DataFrame(columns=columns)
 
     for ticker in tickers:
-        obv_df.loc[ticker.ticker] = data.obv(ticker, period=opts.period)
+        obv = data.obv(ticker, period=opts.period)
 
-    obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
-    obv_df.sort_values("OBV", inplace=True, ascending=False)
+        df.loc[ticker.ticker] = [
+            obv,
+        ]
 
+    df["Rank"] = (
+        df[columns]
+        .apply(tuple, axis=1)
+        .rank(method="dense", ascending=False)
+        .astype(int)
+    )
+    df.sort_values("Rank", inplace=True, ascending=False)
 
-    print(obv_df)
+    print(df)
 
     return 0
