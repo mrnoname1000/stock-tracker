@@ -1,5 +1,6 @@
 import textwrap
 import math
+import concurrent.futures
 
 import numpy as np
 import pandas as pd
@@ -38,11 +39,17 @@ def main():
     columns = info_keys + []
     df = pd.DataFrame(columns=columns)
 
-    for ticker in tickers:
-        df.loc[ticker.ticker] = [
-            ticker.info[key] if key in ticker.info else np.nan
-            for key in info_keys
+    threads = min(32, len(tickers))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+
+        futures = [
+            executor.submit(lambda x: (x.ticker, x.info), ticker) for ticker in tickers
         ]
+
+        for future in futures:
+            ticker, info = future.result()
+
+            df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
 
     df["score"] = data.score(df)
 
