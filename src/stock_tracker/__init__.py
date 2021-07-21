@@ -5,7 +5,7 @@ import concurrent.futures
 import numpy as np
 import pandas as pd
 
-from . import option, data, yfinance as yf
+from . import option, data, threading, yfinance as yf
 
 
 def main():
@@ -56,16 +56,12 @@ def main():
     df = pd.DataFrame(columns=columns)
 
     threads = min(max_threads, len(tickers))
-    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-
-        futures = [
-            executor.submit(lambda x: (x.ticker, x.info), ticker) for ticker in tickers
-        ]
-
-        for future in futures:
-            ticker, info = future.result()
-
-            df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
+    for ticker, info in threading.tmap(
+        lambda x: (x.ticker, x.info),
+        tickers,
+        max_workers=threads,
+    ):
+        df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
 
     df["score"] = data.score(df)
 
