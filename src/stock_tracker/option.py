@@ -3,6 +3,25 @@ import sys
 import argparse
 import textwrap
 
+
+def period(s):
+    """Test for valid time period"""
+    lower = s.lower()
+
+    if lower in ("ytd", "max"):
+        return s
+
+    for suffix in ("d", "mo", "y"):
+        prefix = s[: -len(suffix)]
+        if (
+            lower.endswith(suffix)
+            and prefix.encode("ascii", errors="replace").isdigit()
+        ):
+            return s
+
+    raise ValueError
+
+
 def positive_int(i):
     if i < 0:
         raise ValueError
@@ -50,13 +69,11 @@ def build_parser():
         ).strip("\n"),
     )
 
-    date_values = ("1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max")
-
     parser.add_argument(
         "--period",
         action="store",
-        choices=date_values,
-        default="max",
+        type=period,
+        default="1mo",
         help=textwrap.dedent(
             f"""
             Period of dates to consider (e.g. 5d, 6mo, 10y, ytd, max)
