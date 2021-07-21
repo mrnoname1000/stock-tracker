@@ -24,17 +24,24 @@ def main():
     tickers = yf.Tickers(opts.stocks).tickers.values()
 
     # stock analysis
-    columns = [
+
+    info_keys = [
         "earningsQuarterlyGrowth",
         "revenueQuarterlyGrowth",
+        "pegRatio",
+        "grossMargins",
+        "debtToEquity",
+        "ebitda",
+        "trailingPE",
+        "forwardPE",
     ]
+    columns = info_keys + []
     df = pd.DataFrame(columns=columns)
 
     for ticker in tickers:
         df.loc[ticker.ticker] = [
-            ticker.info["earningsQuarterlyGrowth"],
-            # revenueGrowth seems to be quarterly revenue growth
-            ticker.info["revenueGrowth"],
+            ticker.info[key] if key in ticker.info else np.nan
+            for key in info_keys
         ]
 
     df["Rank"] = (
