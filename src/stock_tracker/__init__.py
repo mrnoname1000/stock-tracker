@@ -30,20 +30,7 @@ def main():
     obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
     obv_df.sort_values("OBV", inplace=True, ascending=False)
 
-    cutcount = min(10, len(obv_df.index) / 2)
-    print(textwrap.dedent(f"""
-        Subject: Daily Stock Report
 
-        Your highest ranked OBV stocks of the day:
-
-        {' '.join(obv_df.head(math.ceil(cutcount)).index.values)}
-
-        Your lowest ranked OBV stocks of the day:
-
-        {' '.join(obv_df.tail(math.floor(cutcount)).index.values[::-1])}
-
-        Sincerely,
-        Your Computer
-    """).strip("\n"))
+    print(obv_df)
 
     return 0
