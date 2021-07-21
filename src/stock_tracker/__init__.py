@@ -54,7 +54,7 @@ def main():
     df = pd.DataFrame(columns=columns)
 
     threads = min(max_threads, len(tickers))
-    for ticker, info in threading.tmap(
+    for ticker, info in threading.thread_map(
         lambda x: (x.ticker, x.info),
         tickers,
         max_workers=threads,

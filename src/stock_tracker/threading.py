@@ -16,17 +16,25 @@ def vanilla_thread_map(fn, *iterables, **kwargs):
         return list(ex.map(fn, *iterables, chunksize=chunksize))
 
 
-def tmap(fn, *iterables, **kwargs):
+def thread_map(fn, *iterables, **kwargs):
+    # progress bar not needed for single element
+    if len(iterables[0]) == 1:
+        return map(fn, *iterables)
+
+
+    # determine if progress bar is wanted
     max_workers = kwargs.get("max_workers")
 
-    if kwargs.get("progress") and tqdm_map and tqdm_thread_map:
+    if kwargs.pop("progress", True) and tqdm_map and tqdm_thread_map:
         tmap = tqdm_map
         thread_map = tqdm_thread_map
     else:
-        tmap = map
+        tmap = lambda *k, **kw: map(*k)
         thread_map = vanilla_thread_map
 
-    if len(iterables[0]) == 1 or max_workers is not None and max_workers == 1:
-        return tmap(fn, *iterables, chunksize=kwargs.get("chunksize"))
+
+    # multithreading not needed for one worker
+    if max_workers is not None and max_workers == 1:
+        return tmap(fn, *iterables, chunksize=kwargs.get("chunksize", 1))
 
     return thread_map(fn, *iterables, **kwargs)
