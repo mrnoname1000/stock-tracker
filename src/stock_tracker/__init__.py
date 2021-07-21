@@ -11,8 +11,7 @@ from . import option, data
 
 
 def main():
-    parser = option.build_parser()
-    opts = parser.parse_args()
+    opts = option.build_parser().parse_args()
 
     if not opts.stocks:
         opts.stocks = gt.get_tickers_filtered(
