@@ -94,4 +94,10 @@ def build_parser():
         ).strip("\n"),
     )
 
+    parser.add_argument(
+        "--cache",
+        action=argparse.BooleanOptionalAction,
+        help=argparse.SUPPRESS,
+    )
+
     return parser

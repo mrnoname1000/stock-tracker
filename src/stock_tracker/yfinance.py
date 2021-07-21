@@ -16,14 +16,11 @@ class Ticker(yf.Ticker):
 
 
 class Tickers(yf.Tickers):
-    def __init__(self, tickers):
-        tickers = (
+    def __init__(self, tickers, session=None):
+        self.symbols = (
             tickers if isinstance(tickers, list) else tickers.replace(",", " ").split()
         )
-        self.symbols = [ticker.upper() for ticker in tickers]
-        ticker_objects = {}
+        self.tickers = {}
 
         for ticker in self.symbols:
-            ticker_objects[ticker] = Ticker(ticker)
-
-        self.tickers = ticker_objects
+            self.tickers[ticker] = Ticker(ticker, session=session)

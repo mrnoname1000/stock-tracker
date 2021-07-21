@@ -22,7 +22,23 @@ def main():
             mktcap_max=opts.market_cap_max,
         )
 
-    tickers = yf.Tickers(opts.stocks).tickers.values()
+    # create cached session
+    max_threads = 32
+    session = None
+
+    if opts.cache:
+        try:
+            import requests_cache
+        except ImportError:
+            pass
+        else:
+            max_threads = 1
+            session = requests_cache.CachedSession(
+                "stock-tracker.cache", expire_after=60 * 60
+            )
+
+    # create tickers
+    tickers = yf.Tickers(opts.stocks, session=session).tickers.values()
 
     # stock analysis
 
@@ -39,7 +55,7 @@ def main():
     columns = info_keys + []
     df = pd.DataFrame(columns=columns)
 
-    threads = min(32, len(tickers))
+    threads = min(max_threads, len(tickers))
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
 
         futures = [
