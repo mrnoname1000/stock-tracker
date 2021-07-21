@@ -19,7 +19,7 @@ def vanilla_thread_map(fn, *iterables, **kwargs):
 def tmap(fn, *iterables, **kwargs):
     max_workers = kwargs.get("max_workers")
 
-    if tqdm_tmap and tqdm_thread_map:
+    if kwargs.get("progress") and tqdm_map and tqdm_thread_map:
         tmap = tqdm_map
         thread_map = tqdm_thread_map
     else:

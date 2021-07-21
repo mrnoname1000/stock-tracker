@@ -95,6 +95,13 @@ def build_parser():
     )
 
     parser.add_argument(
+        "--progress",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Show progress bars when fetching data",
+    )
+
+    parser.add_argument(
         "--cache",
         action=argparse.BooleanOptionalAction,
         help=argparse.SUPPRESS,

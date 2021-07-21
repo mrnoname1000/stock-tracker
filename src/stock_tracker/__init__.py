@@ -60,6 +60,7 @@ def main():
         lambda x: (x.ticker, x.info),
         tickers,
         max_workers=threads,
+        progress=opts.progress,
     ):
         df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
 
