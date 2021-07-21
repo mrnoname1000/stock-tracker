@@ -2,5 +2,16 @@
 
 import numpy as np
 
-def obv(df):
-    return (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().to_numpy()[-1]
+def obv(ticker, period="1mo"):
+    """
+    Calculate OBV for a stock
+
+    Arguments:
+        ticker: yfinance Ticker object
+        period:
+
+    Return:
+        a single integer of the type used by yfinance
+    """
+    df = ticker.history(period=period)
+    return (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().values[-1]

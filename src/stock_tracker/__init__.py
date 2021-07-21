@@ -25,7 +25,7 @@ def main():
     obv_df = pd.DataFrame(columns=["OBV"])
 
     for ticker in tickers:
-        obv_df.loc[ticker.ticker] = data.obv(ticker.history(period=opts.period))
+        obv_df.loc[ticker.ticker] = data.obv(ticker, period=opts.period)
 
     obv_df["Rank"] = obv_df["OBV"].rank(ascending=False)
     obv_df.sort_values("OBV", inplace=True, ascending=False)
