@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import numpy as np
 
+
 def obv(ticker, period="1mo"):
     """
     Calculate OBV for a stock
