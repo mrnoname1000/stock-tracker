@@ -29,6 +29,7 @@ def positive_int(i):
 
 
 def build_parser():
+    # TODO: create custom help formatter
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
         description="Rank stocks based on various factors",
@@ -78,6 +79,17 @@ def build_parser():
             f"""
             Period of dates to consider (e.g. 5d, 6mo, 10y, ytd, max)
             default: %(default)s
+            """
+        ).strip("\n"),
+    )
+
+    parser.add_argument(
+        "--lookup",
+        action=argparse.BooleanOptionalAction,
+        help=textwrap.dedent(
+            """
+            Look up stocks based on market cap
+            default: no (unless no stocks are specified)
             """
         ).strip("\n"),
     )

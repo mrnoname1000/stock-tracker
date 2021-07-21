@@ -4,8 +4,6 @@ import math
 import numpy as np
 import pandas as pd
 
-from get_all_tickers import get_tickers as gt
-
 from . import option, data, yfinance as yf
 
 
@@ -13,10 +11,16 @@ def main():
     opts = option.build_parser().parse_args()
 
     if not opts.stocks:
-        opts.stocks = gt.get_tickers_filtered(
+        opts.lookup = True
+
+    if opts.lookup:
+        from get_all_tickers import get_tickers as gt
+
+        opts.stocks += gt.get_tickers_filtered(
             mktcap_min=opts.market_cap_min,
             mktcap_max=opts.market_cap_max,
         )
+
     tickers = yf.Tickers(opts.stocks).tickers.values()
 
     # stock analysis
