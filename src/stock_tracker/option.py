@@ -13,10 +13,7 @@ def period(s):
 
     for suffix in ("d", "mo", "y"):
         prefix = s[: -len(suffix)]
-        if (
-            lower.endswith(suffix)
-            and prefix.encode("ascii", errors="replace").isdigit()
-        ):
+        if lower.endswith(suffix) and prefix.encode("ascii", errors="replace").isdigit():
             return s
 
     raise ValueError

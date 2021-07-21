@@ -33,9 +33,7 @@ def main():
             pass
         else:
             max_threads = 1
-            session = requests_cache.CachedSession(
-                "stock-tracker.cache", expire_after=60 * 60
-            )
+            session = requests_cache.CachedSession("stock-tracker.cache", expire_after=60 * 60)
 
     # create tickers
     tickers = yf.Tickers(opts.stocks, session=session).tickers.values()

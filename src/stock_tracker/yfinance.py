@@ -17,9 +17,7 @@ class Ticker(yf.Ticker):
 
 class Tickers(yf.Tickers):
     def __init__(self, tickers, session=None):
-        self.symbols = (
-            tickers if isinstance(tickers, list) else tickers.replace(",", " ").split()
-        )
+        self.symbols = tickers if isinstance(tickers, list) else tickers.replace(",", " ").split()
         self.tickers = {}
 
         for ticker in self.symbols:
