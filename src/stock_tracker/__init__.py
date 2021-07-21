@@ -3,11 +3,10 @@ import math
 
 import numpy as np
 import pandas as pd
-import yfinance as yf
 
 from get_all_tickers import get_tickers as gt
 
-from . import option, data
+from . import option, data, yfinance as yf
 
 
 def main():
