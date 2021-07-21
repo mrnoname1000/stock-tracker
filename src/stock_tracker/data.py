@@ -13,4 +13,7 @@ def obv(ticker, period="1mo"):
         an integer
     """
     df = ticker.history(period=period)
+    if len(df.index) <= 1:
+        return 0
+
     return (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().values[-1]
