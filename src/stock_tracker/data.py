@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import numpy as np
 
 def obv(ticker, period="1mo"):
@@ -8,10 +7,10 @@ def obv(ticker, period="1mo"):
 
     Arguments:
         ticker: yfinance Ticker object
-        period:
+        period: any period accepted by yfinance.history()
 
     Return:
-        a single integer of the type used by yfinance
+        an integer
     """
     df = ticker.history(period=period)
     return (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().values[-1]

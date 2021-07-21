@@ -11,7 +11,7 @@ def positive_int(i):
 def build_parser():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description="assess stocks based on various factors",
+        description="rank stocks based on various factors",
     )
 
     parser.add_argument(
