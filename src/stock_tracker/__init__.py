@@ -44,13 +44,9 @@ def main():
             for key in info_keys
         ]
 
-    df["Rank"] = (
-        df[columns]
-        .apply(tuple, axis=1)
-        .rank(method="dense", ascending=False)
-        .astype(int)
-    )
-    df.sort_values("Rank", inplace=True, ascending=False)
+    df["score"] = data.score(df)
+
+    df.sort_values("score", inplace=True, ascending=False)
 
     print(df)
 
