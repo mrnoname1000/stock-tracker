@@ -22,7 +22,7 @@ def main():
             mktcap_max=opts.market_cap_max,
         )
 
-    # create cached session
+    # create cached session if requested
     max_threads = 32
     session = None
 

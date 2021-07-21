@@ -28,11 +28,11 @@ def score(df):
     # 2
     score += df["revenueQuarterlyGrowth"]
     # 3
-    score += (df["pegRatio"] - 1)
+    score += df["pegRatio"] - 1
     # 4
-    score += (df["grossMargins"] - 0.35)
+    score += df["grossMargins"] - 0.35
     # 5
-    score -= (df["debtToEquity"] / 100 - 0.35)
+    score -= df["debtToEquity"] / 100 - 0.35
     # 7
-    score += (df["trailingPE"] / df["forwardPE"])
+    score += df["trailingPE"] / df["forwardPE"]
     return score
