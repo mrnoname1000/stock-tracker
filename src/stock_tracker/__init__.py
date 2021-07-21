@@ -28,10 +28,8 @@ def main():
     df = pd.DataFrame(columns=columns)
 
     for ticker in tickers:
-        obv = data.obv(ticker, period=opts.period)
-
         df.loc[ticker.ticker] = [
-            obv,
+            data.obv(ticker, period=opts.period, interval=opts.interval)
         ]
 
     df["Rank"] = (
