@@ -21,18 +21,23 @@ def obv(ticker, period="1mo", interval="1d"):
     return (np.sign(df["Close"].diff()) * df["Volume"]).cumsum().values[-1]
 
 
+def zero_if_nan(x):
+    return np.where(np.isnan(x), 0, x)
+
+
 def score(df):
     score = 0
     # 1
-    score += df["earningsQuarterlyGrowth"]
+    score += zero_if_nan(df["earningsQuarterlyGrowth"])
     # 2
-    score += df["revenueQuarterlyGrowth"]
+    score += zero_if_nan(df["revenueQuarterlyGrowth"])
     # 3
-    score += df["pegRatio"] - 1
+    score += zero_if_nan(df["pegRatio"] - 1)
     # 4
-    score += df["grossMargins"] - 0.35
+    score += zero_if_nan(df["grossMargins"] - 0.35)
     # 5
-    score -= df["debtToEquity"] / 100 - 0.35
+    score -= zero_if_nan(df["debtToEquity"] / 100 - 0.35)
     # 7
-    score += df["trailingPE"] / df["forwardPE"]
+    score += zero_if_nan(df["trailingPE"]) / df["forwardPE"]
+
     return score
