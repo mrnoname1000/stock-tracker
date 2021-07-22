@@ -35,7 +35,7 @@ def main():
         session = None
 
     # create tickers
-    tickers = yf.Tickers(opts.stocks, session=session).tickers.values()
+    tickers = [yf.Ticker(stock, session=session) for stock in opts.stocks]
 
     # stock analysis
 

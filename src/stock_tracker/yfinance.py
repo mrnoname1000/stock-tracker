@@ -13,12 +13,3 @@ class Ticker(yf.Ticker):
                 self._info["revenueQuarterlyGrowth"],
             )
         return super().get_info()
-
-
-class Tickers(yf.Tickers):
-    def __init__(self, tickers, session=None):
-        self.symbols = tickers if isinstance(tickers, list) else tickers.replace(",", " ").split()
-        self.tickers = {}
-
-        for ticker in self.symbols:
-            self.tickers[ticker] = Ticker(ticker, session=session)
