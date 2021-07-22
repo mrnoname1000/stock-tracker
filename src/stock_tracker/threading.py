@@ -1,5 +1,3 @@
-import concurrent.futures
-
 try:
     from tqdm.contrib import tmap as tqdm_map
     from tqdm.contrib.concurrent import thread_map as tqdm_thread_map
@@ -9,6 +7,8 @@ except ImportError:
 
 
 def vanilla_thread_map(fn, *iterables, **kwargs):
+    import concurrent.futures
+
     max_workers = kwargs.get("max_workers")
     chunksize = kwargs.get("chunksize")
 
