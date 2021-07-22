@@ -29,7 +29,7 @@ def score(df):
     # 1
     score += zero_if_nan(df["earningsQuarterlyGrowth"])
     # 2
-    score += zero_if_nan(df["revenueQuarterlyGrowth"])
+    score += zero_if_nan(df["revenueGrowth"])
     # 3
     score += zero_if_nan(df["pegRatio"] - 1)
     # 4

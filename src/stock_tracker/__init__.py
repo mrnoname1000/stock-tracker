@@ -4,8 +4,9 @@ import concurrent.futures
 
 import numpy as np
 import pandas as pd
+import yfinance as yf
 
-from . import constants, option, data, threading, yfinance as yf
+from . import constants, option, data, threading
 
 
 def main():
@@ -41,7 +42,7 @@ def main():
 
     info_keys = [
         "earningsQuarterlyGrowth",
-        "revenueQuarterlyGrowth",
+        "revenueGrowth", # seems to be quarterly
         "pegRatio",
         "grossMargins",
         "debtToEquity",
@@ -72,6 +73,11 @@ def main():
 
     df.sort_values("score", inplace=True, ascending=False)
 
+    # format for user
+    new_columns = {column: column for column in columns}
+    new_columns["revenueGrowth"] = "revenueQuarterlyGrowth"
+
+    df.rename(new_columns)
     print(df)
 
     return 0
