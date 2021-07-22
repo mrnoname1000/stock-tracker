@@ -29,12 +29,12 @@ def thread_map(fn, *iterables, **kwargs):
         tmap = tqdm_map
         thread_map = tqdm_thread_map
     else:
-        tmap = lambda *k, **kw: map(*k)
+        tmap = map
         thread_map = vanilla_thread_map
 
 
     # multithreading not needed for one worker
     if max_workers is not None and max_workers == 1:
-        return tmap(fn, *iterables, chunksize=kwargs.get("chunksize", 1))
+        return tmap(fn, *iterables)
 
     return thread_map(fn, *iterables, **kwargs)
