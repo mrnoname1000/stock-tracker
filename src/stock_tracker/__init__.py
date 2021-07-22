@@ -5,7 +5,7 @@ import concurrent.futures
 import numpy as np
 import pandas as pd
 
-from . import option, data, threading, yfinance as yf
+from . import constants, option, data, threading, yfinance as yf
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
         except ImportError:
             pass
         else:
-            session = requests_cache.CachedSession("stock-tracker.cache", expire_after=60 * 60)
+            session = requests_cache.CachedSession(constants.REQUESTS_CACHE, expire_after=60 * 60)
     else:
         session = None
 
