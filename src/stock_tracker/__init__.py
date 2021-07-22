@@ -53,14 +53,23 @@ def main():
     columns = info_keys + []
     df = pd.DataFrame(columns=columns)
 
+
+    def get_info(x):
+        try:
+            info = x.info
+        except KeyError as e:
+            info = None
+        return x.ticker, info
+
     threads = min(max_threads, len(tickers))
     for ticker, info in threading.thread_map(
-        lambda x: (x.ticker, x.info),
+        get_info,
         tickers,
         max_workers=threads,
         progress=opts.progress,
     ):
-        df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
+        if info is not None:
+            df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
 
     df["score"] = data.score(df)
 
