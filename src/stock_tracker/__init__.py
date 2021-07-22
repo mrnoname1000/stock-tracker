@@ -22,18 +22,17 @@ def main():
             mktcap_max=opts.market_cap_max,
         )
 
-    # create cached session if requested
-    max_threads = 32
-    session = None
 
+    # create cached session if requested
     if opts.cache:
         try:
             import requests_cache
         except ImportError:
             pass
         else:
-            max_threads = 1
             session = requests_cache.CachedSession("stock-tracker.cache", expire_after=60 * 60)
+    else:
+        session = None
 
     # create tickers
     tickers = yf.Tickers(opts.stocks, session=session).tickers.values()
@@ -61,11 +60,9 @@ def main():
             info = None
         return x.ticker, info
 
-    threads = min(max_threads, len(tickers))
     for ticker, info in threading.thread_map(
         get_info,
         tickers,
-        max_workers=threads,
         progress=opts.progress,
     ):
         if info is not None:
