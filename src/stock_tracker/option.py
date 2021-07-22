@@ -1,6 +1,4 @@
-import sys
 import argparse
-import textwrap
 
 
 def period(s):

@@ -1,7 +1,3 @@
-import textwrap
-import math
-import concurrent.futures
-
 import numpy as np
 import pandas as pd
 import yfinance as yf
@@ -40,9 +36,10 @@ def main():
 
     # stock analysis
 
+    # keys that correspond to keys in Ticker.info
     info_keys = [
         "earningsQuarterlyGrowth",
-        "revenueGrowth", # seems to be quarterly
+        "revenueGrowth",  # seems to be quarterly
         "pegRatio",
         "grossMargins",
         "debtToEquity",
@@ -50,7 +47,7 @@ def main():
         "trailingPE",
         "forwardPE",
     ]
-    columns = info_keys + []
+    columns = info_keys
     df = pd.DataFrame(columns=columns)
 
 
