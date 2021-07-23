@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
+from contextlib import suppress
+
 from . import constants, option, data, threading
 
 
@@ -52,19 +54,15 @@ def main():
 
 
     def get_info(x):
-        try:
-            info = x.info
-        except KeyError as e:
-            info = None
-        return x.ticker, info
+        with suppress(KeyError):
+            x.get_info()
+        return x
 
-    for ticker, info in threading.thread_map(
-        get_info,
-        tickers,
-        progress=opts.progress,
-    ):
-        if info is not None:
-            df.loc[ticker] = [info[key] if key in info else np.nan for key in info_keys]
+    for ticker in threading.thread_map(get_info, tickers, progress=opts.progress):
+        if ticker.info is not None:
+            df.loc[ticker.ticker] = [
+                ticker.info[key] if key in info else np.nan for key in info_keys
+            ]
 
     df["score"] = data.score(df)
 
