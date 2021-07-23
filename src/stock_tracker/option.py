@@ -100,6 +100,13 @@ def build_parser():
     )
 
     parser.add_argument(
+        "-j",
+        "--jobs",
+        type=positive_int,
+        help="Number of jobs to run in parallel",
+    )
+
+    parser.add_argument(
         "--cache",
         action=argparse.BooleanOptionalAction,
         help=argparse.SUPPRESS,
