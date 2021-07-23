@@ -17,18 +17,6 @@ def main():
     pd.set_option("display.max_columns", None)
 
 
-    if not opts.stocks:
-        opts.lookup = True
-
-    if opts.lookup:
-        from get_all_tickers import get_tickers as gt
-
-        opts.stocks += gt.get_tickers_filtered(
-            mktcap_min=opts.market_cap_min,
-            mktcap_max=opts.market_cap_max,
-        )
-
-
     # create cached session if requested
     if opts.cache:
         try:
@@ -39,6 +27,21 @@ def main():
             session = requests_cache.CachedSession(constants.REQUESTS_CACHE, expire_after=60 * 60)
     else:
         session = None
+
+
+    # get tickers if required
+    if not opts.stocks:
+        opts.lookup = True
+
+    if opts.lookup:
+        from get_all_tickers import get_tickers as gt
+
+        opts.stocks.extend(
+            gt.get_tickers_filtered(
+                mktcap_min=opts.market_cap_min,
+                mktcap_max=opts.market_cap_max,
+            )
+        )
 
     # create tickers
     tickers = [yf.Ticker(stock, session=session) for stock in opts.stocks]
