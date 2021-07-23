@@ -10,6 +10,13 @@ from . import constants, option, data, threading
 def main():
     opts = option.build_parser().parse_args()
 
+
+    # pandas config
+    pd.set_option("display.float_format", lambda x: f"{x:f}")
+    pd.set_option("display.max_rows", None)
+    pd.set_option("display.max_columns", None)
+
+
     if not opts.stocks:
         opts.lookup = True
 
