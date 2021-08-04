@@ -8,3 +8,6 @@ pip install stock-tracker@git+https://github.com/mrnoname1000/stock-tracker
 ```shell
 pip install stock-tracker@https://github.com/mrnoname1000/stock-tracker/tarball/master
 ```
+
+### Usage
+Use `stock-tracker --help` for usage
