@@ -71,7 +71,7 @@ def main():
     for ticker in threading.thread_map(get_info, tickers, progress=opts.progress):
         if ticker.info is not None:
             df.loc[ticker.ticker] = [
-                ticker.info[key] if key in info else np.nan for key in info_keys
+                ticker.info[key] if key in ticker.info else np.nan for key in info_keys
             ]
 
     df["score"] = data.score(df)
