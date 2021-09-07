@@ -1,9 +1,5 @@
-try:
-    from tqdm.contrib import tmap as tqdm_map
-    from tqdm.contrib.concurrent import thread_map as tqdm_thread_map
-except ImportError:
-    tqdm_map = None
-    tqdm_thread_map = None
+from tqdm.contrib import tmap
+from tqdm.contrib.concurrent import thread_map
 
 
 def vanilla_thread_map(fn, *iterables, **kwargs):
@@ -24,13 +20,6 @@ def thread_map(fn, *iterables, **kwargs):
 
     # determine if progress bar is wanted
     max_workers = kwargs.get("max_workers")
-
-    if kwargs.pop("progress", True) and tqdm_map and tqdm_thread_map:
-        tmap = tqdm_map
-        thread_map = tqdm_thread_map
-    else:
-        tmap = map
-        thread_map = vanilla_thread_map
 
 
     # multithreading not needed for one worker

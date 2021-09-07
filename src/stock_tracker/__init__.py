@@ -68,7 +68,7 @@ def main():
             x.get_info()
         return x
 
-    for ticker in threading.thread_map(get_info, tickers, progress=opts.progress):
+    for ticker in threading.thread_map(get_info, tickers):
         if ticker.info is not None:
             df.loc[ticker.ticker] = [
                 ticker.info[key] if key in ticker.info else np.nan for key in info_keys
