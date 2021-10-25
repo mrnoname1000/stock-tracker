@@ -8,4 +8,3 @@ PROGNAME = "stock-tracker"
 _DIRS = AppDirs(PROGNAME)
 
 DATA_DIR = Path(_DIRS.user_data_dir)
-REQUESTS_CACHE = DATA_DIR / "requests.cache"

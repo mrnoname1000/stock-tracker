@@ -17,18 +17,6 @@ def main():
     pd.set_option("display.max_columns", None)
 
 
-    # create cached session if requested
-    if opts.cache:
-        try:
-            import requests_cache
-        except ImportError:
-            pass
-        else:
-            session = requests_cache.CachedSession(constants.REQUESTS_CACHE, expire_after=60 * 60)
-    else:
-        session = None
-
-
     # get tickers if required
     if not opts.stocks:
         opts.lookup = True
@@ -44,7 +32,7 @@ def main():
         )
 
     # create tickers
-    tickers = [yf.Ticker(stock, session=session) for stock in opts.stocks]
+    tickers = [yf.Ticker(stock) for stock in opts.stocks]
 
     # stock analysis
 
