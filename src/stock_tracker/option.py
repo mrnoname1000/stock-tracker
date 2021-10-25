@@ -1,4 +1,4 @@
-import argparse
+import argparse, datetime
 
 
 def period(s):
@@ -97,6 +97,21 @@ def build_parser():
         "--jobs",
         type=positive_int,
         help="Number of jobs to run in parallel",
+    )
+
+    def date(s):
+        return datetime.datetime.strptime(s, "%Y-%m-%d")
+
+    parser.add_argument(
+        "--start",
+        type=date,
+        help="Start date of earnings reports (format: YYYY-MM-DD)",
+    )
+
+    parser.add_argument(
+        "--end",
+        type=date,
+        help="End date of earnings reports (format: YYYY-MM-DD)",
     )
 
     return parser
