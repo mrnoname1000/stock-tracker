@@ -52,44 +52,10 @@ def build_parser():
     )
 
     parser.add_argument(
-        "--market-cap-min",
-        metavar="INT",
-        action="store",
-        default=50000,
-        type=int,
-        help="Minimum market cap to search (default: %(default)s)",
-    )
-
-    parser.add_argument(
-        "--market-cap-max",
-        metavar="INT",
-        action="store",
-        default=None,
-        type=positive_int,
-        help="Maximum market cap to search (default: %(default)s)",
-    )
-
-    parser.add_argument(
-        "--period",
-        action="store",
-        type=period,
-        default="1mo",
-        help="Period of dates to consider (e.g. 5d, 6mo, 10y, ytd, max) (default: %(default)s)",
-    )
-
-    parser.add_argument(
-        "--interval",
-        action="store",
-        choices=INTERVAL_VALUES,
-        default="1d",
-        help="Granularity of samples (default: %(default)s)",
-    )
-
-    parser.add_argument(
         "--lookup",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="Look up stocks based on market cap",
+        help="Look up stocks based on earnings date",
     )
 
     parser.add_argument(
@@ -100,18 +66,23 @@ def build_parser():
     )
 
     def date(s):
-        return datetime.datetime.strptime(s, "%Y-%m-%d")
+        return datetime.datetime.strptime(s, "%Y-%m-%d").date()
 
+    # TODO: parse time delta on command line
     parser.add_argument(
         "--start",
         type=date,
-        help="Start date of earnings reports (format: YYYY-MM-DD)",
+        metavar="YYYY-MM-DD",
+        default=datetime.date.today(),
+        help="Start date of earnings reports",
     )
 
     parser.add_argument(
         "--end",
         type=date,
-        help="End date of earnings reports (format: YYYY-MM-DD)",
+        metavar="YYYY-MM-DD",
+        default=datetime.date.today() + datetime.timedelta(days=90),
+        help="End date of earnings reports",
     )
 
     return parser
