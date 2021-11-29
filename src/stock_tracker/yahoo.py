@@ -31,8 +31,6 @@ def get_stock_earnings_data_between(start, end):
     earnings_reports = yec.earnings_between(start, end)
 
     for report in earnings_reports:
-        del report["gmtOffsetMilliSeconds"]
-
         ticker = report.pop("ticker")
         df = pd.DataFrame(index=[ticker], data=report)
         data = pd.concat([data, df])
