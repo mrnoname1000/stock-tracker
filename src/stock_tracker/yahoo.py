@@ -1,12 +1,27 @@
 import sys
+import datetime
 
 import pandas as pd
 import yfinance as yf
 
 from contextlib import suppress
-from yahoo_earnings_calendar import YahooEarningsCalendar
+from ratelimit import limits, sleep_and_retry
+from tqdm.contrib import tmap
+from yahoo_earnings_calendar import YahooEarningsCalendar as _YahooEarningsCalendar
 
 from . import threading
+
+
+class YahooEarningsCalendar(_YahooEarningsCalendar):
+    def __init__(self):
+        self.delay = 0
+
+    @sleep_and_retry
+    @limits(calls=5, period=1)
+    @limits(calls=2000, period=datetime.timedelta(hours=1).total_seconds())
+    def _get_data_dict(self, url, **headers):
+        return super()._get_data_dict(url, **headers)
+
 
 def get_stock_earnings_data_between(start, end):
     data = pd.DataFrame()
@@ -27,6 +42,9 @@ def get_stock_earnings_data_between(start, end):
 def get_stock_data(*symbols):
     data = pd.DataFrame()
 
+    @sleep_and_retry
+    @limits(calls=5, period=1)
+    @limits(calls=2000, period=60 * 60)
     def get_ticker(symbol):
         symbol = symbol.upper()
 
@@ -37,7 +55,7 @@ def get_stock_data(*symbols):
         return ticker
 
     # this can take a while, so show a progress bar
-    for ticker in threading.thread_map(get_ticker, symbols):
+    for ticker in tmap(get_ticker, symbols):
         symbol = ticker.ticker
         info = ticker.info
 
