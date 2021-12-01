@@ -1,9 +1,9 @@
 import sys
-import datetime
 
 import pandas as pd
 import yfinance as yf
 
+from datetime import datetime, timedelta
 from contextlib import suppress
 from ratelimit import limits, sleep_and_retry
 from tqdm.contrib import tmap
@@ -18,7 +18,7 @@ class YahooEarningsCalendar(_YahooEarningsCalendar):
 
     @sleep_and_retry
     @limits(calls=5, period=1)
-    @limits(calls=2000, period=datetime.timedelta(hours=1).total_seconds())
+    @limits(calls=2000, period=timedelta(hours=1).total_seconds())
     def _get_data_dict(self, url, **headers):
         return super()._get_data_dict(url, **headers)
 
