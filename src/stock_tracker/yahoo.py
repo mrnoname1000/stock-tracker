@@ -71,6 +71,17 @@ def get_stock_earnings_data_between(start, end):
     return reports
 
 
+def populate_earnings_df(ticker, earnings):
+    reports_l = yec.get_earnings_of(ticker)
+
+    for report in reports_l:
+        trim_constants(report)
+
+        startdatetime = parse_datetime(report.pop("startdatetime"))
+
+        earnings.loc[startdatetime] = report
+
+
 def get_stock_data(*symbols):
     data = pd.DataFrame()
 

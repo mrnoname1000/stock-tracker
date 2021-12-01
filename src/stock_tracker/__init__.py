@@ -22,8 +22,10 @@ def main():
     earnings = yahoo.get_stock_earnings_data_between(opts.start, opts.end)
 
 
-    for ticker in earnings:
+    for ticker, df in earnings.items():
+        yahoo.populate_earnings_df(ticker, df)
+
         print(ticker)
-        print(earnings[ticker])
+        print(df)
 
     return 0
