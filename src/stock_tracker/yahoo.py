@@ -27,17 +27,27 @@ yec = YahooEarningsCalendar()
 
 
 def get_stock_earnings_data_between(start, end):
-    data = pd.DataFrame()
-
     # fetch yahoo earnings calendar
     earnings_reports = yec.earnings_between(start, end)
 
+    reports = {}
+
     for report in earnings_reports:
         ticker = report.pop("ticker")
-        df = pd.DataFrame(index=[ticker], data=report)
-        data = pd.concat([data, df])
 
-    return data
+        # TODO: integrate dateutil for proper parsing of timezones
+        startdatetime = report.pop("startdatetime").rstrip("Z")
+        startdatetime = datetime.fromisoformat(startdatetime)
+
+        df = pd.DataFrame(index=[startdatetime], data=report)
+
+        if ticker in reports:
+            reports[ticker] = pd.concat([reports[ticker], df])
+        else:
+            reports[ticker] = df
+
+    return reports
+
 
 def get_stock_data(*symbols):
     data = pd.DataFrame()

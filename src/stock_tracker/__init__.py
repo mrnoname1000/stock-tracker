@@ -20,9 +20,10 @@ def main():
 
     # get yahoo calendar data
     earnings = yahoo.get_stock_earnings_data_between(opts.start, opts.end)
-    stocks = pd.concat([stocks, earnings])
 
-    stocks = pd.concat([stocks, yahoo.get_stock_data(*stocks.index)])
-    print(stocks)
+
+    for ticker in earnings:
+        print(ticker)
+        print(earnings[ticker])
 
     return 0
