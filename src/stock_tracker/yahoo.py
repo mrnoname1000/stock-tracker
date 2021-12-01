@@ -12,6 +12,12 @@ from yahoo_earnings_calendar import YahooEarningsCalendar as _YahooEarningsCalen
 from . import threading
 
 
+EARNINGS_CONSTANT_KEYS = [
+    "ticker",
+    "companyshortname",
+]
+
+
 class YahooEarningsCalendar(_YahooEarningsCalendar):
     def __init__(self):
         self.delay = 0
@@ -26,19 +32,36 @@ class YahooEarningsCalendar(_YahooEarningsCalendar):
 yec = YahooEarningsCalendar()
 
 
+def parse_datetime(startdatetime):
+    # TODO: integrate dateutil for proper parsing of timezones
+    return datetime.fromisoformat(startdatetime.rstrip("Z"))
+
+
+def trim_constants(earnings_report, constants=EARNINGS_CONSTANT_KEYS):
+    for key in constants:
+        if key in earnings_report:
+            del earnings_report[key]
+
+
+def earnings_to_df(report):
+    report = report.copy()
+    trim_constants(report)
+
+    startdatetime = parse_datetime(report.pop("startdatetime"))
+
+    df = pd.DataFrame(index=[startdatetime], data=report)
+
+    return df
+
+
 def get_stock_earnings_data_between(start, end):
     reports = {}
 
     reports_l = yec.earnings_between(start, end)
 
     for report in reports_l:
-        ticker = report.pop("ticker")
-
-        # TODO: integrate dateutil for proper parsing of timezones
-        startdatetime = report.pop("startdatetime").rstrip("Z")
-        startdatetime = datetime.fromisoformat(startdatetime)
-
-        df = pd.DataFrame(index=[startdatetime], data=report)
+        ticker = report["ticker"]
+        df = earnings_to_df(report)
 
         if ticker in reports:
             reports[ticker] = pd.concat([reports[ticker], df])
