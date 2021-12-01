@@ -27,12 +27,11 @@ yec = YahooEarningsCalendar()
 
 
 def get_stock_earnings_data_between(start, end):
-    # fetch yahoo earnings calendar
-    earnings_reports = yec.earnings_between(start, end)
-
     reports = {}
 
-    for report in earnings_reports:
+    reports_l = yec.earnings_between(start, end)
+
+    for report in reports_l:
         ticker = report.pop("ticker")
 
         # TODO: integrate dateutil for proper parsing of timezones
