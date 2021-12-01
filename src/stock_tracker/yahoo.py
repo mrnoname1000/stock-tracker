@@ -32,11 +32,6 @@ class YahooEarningsCalendar(_YahooEarningsCalendar):
 yec = YahooEarningsCalendar()
 
 
-def parse_datetime(startdatetime):
-    # TODO: integrate dateutil for proper parsing of timezones
-    return datetime.fromisoformat(startdatetime.rstrip("Z"))
-
-
 def trim_constants(earnings_report, constants=EARNINGS_CONSTANT_KEYS):
     for key in constants:
         if key in earnings_report:
@@ -47,7 +42,7 @@ def earnings_to_df(report):
     report = report.copy()
     trim_constants(report)
 
-    startdatetime = parse_datetime(report.pop("startdatetime"))
+    startdatetime = pd.to_datetime(report.pop("startdatetime"))
 
     df = pd.DataFrame(index=[startdatetime], data=report)
 
@@ -77,7 +72,7 @@ def populate_earnings_df(ticker, earnings):
     for report in reports_l:
         trim_constants(report)
 
-        startdatetime = parse_datetime(report.pop("startdatetime"))
+        startdatetime = pd.to_datetime(report.pop("startdatetime"))
 
         earnings.loc[startdatetime] = report
 
