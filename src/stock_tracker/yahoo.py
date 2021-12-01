@@ -23,11 +23,13 @@ class YahooEarningsCalendar(_YahooEarningsCalendar):
         return super()._get_data_dict(url, **headers)
 
 
+yec = YahooEarningsCalendar()
+
+
 def get_stock_earnings_data_between(start, end):
     data = pd.DataFrame()
 
     # fetch yahoo earnings calendar
-    yec = YahooEarningsCalendar()
     earnings_reports = yec.earnings_between(start, end)
 
     for report in earnings_reports:
