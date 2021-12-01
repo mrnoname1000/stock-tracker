@@ -10,7 +10,7 @@ def thread_map(fn, *iterables, **kwargs):
         return map(fn, *iterables)
 
     # multithreading not needed for one worker
-    if "max_workers" in kwargs and kwargs["max_workers"] == 1:
+    if kwargs.get("max_workers") == 1:
         return tmap(fn, *iterables)
 
     return tqdm_thread_map(fn, *iterables, **kwargs)
