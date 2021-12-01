@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def obv(ticker, period="1mo", interval="1d"):
@@ -22,3 +23,20 @@ def obv(ticker, period="1mo", interval="1d"):
 
 def zero_if_nan(x):
     return np.where(np.isnan(x), 0, x)
+
+
+def evaluate(df):
+    df.index.sort_values()
+
+    # Ignore future reports
+    df_past = df.loc[df["epsactual"].notna()]
+
+    # Ignore brand-new stocks
+    if len(df_past) < 2:
+        return False
+
+    # Guarantee MRQ earnings gain of >= 100%
+    if 2 * df_past.iloc[0]["epsactual"] < df_past.iloc[1]["epsactual"]:
+        return False
+
+    return True

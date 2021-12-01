@@ -25,7 +25,7 @@ def main():
     for ticker, df in earnings.items():
         yahoo.populate_earnings_df(ticker, df)
 
-        print(ticker)
-        print(df)
+        if data.evaluate(df):
+            print(ticker, sep="\n")
 
     return 0
