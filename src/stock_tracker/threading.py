@@ -1,5 +1,3 @@
-import concurrent.futures
-
 from tqdm.contrib import tmap
 from tqdm.contrib.concurrent import thread_map as tqdm_thread_map
 

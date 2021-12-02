@@ -1,9 +1,7 @@
-import sys
-
 import pandas as pd
 import yfinance as yf
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from contextlib import suppress
 from ratelimit import limits, sleep_and_retry
 from tqdm.contrib import tmap

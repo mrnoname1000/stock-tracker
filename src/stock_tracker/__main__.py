@@ -1,5 +1,4 @@
 import sys
-
 import stock_tracker
 
 if __name__ == "__main__":

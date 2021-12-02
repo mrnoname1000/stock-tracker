@@ -1,10 +1,6 @@
-import numpy as np
 import pandas as pd
-import yfinance as yf
 
-from yahoo_earnings_calendar import YahooEarningsCalendar
-
-from . import constants, option, data, threading, yahoo
+from . import option, data, yahoo
 
 
 def main():
