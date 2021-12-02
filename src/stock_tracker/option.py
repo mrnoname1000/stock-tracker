@@ -1,4 +1,4 @@
-import argparse, datetime
+import argparse, dateparser, re
 
 
 def positive_int(i):
@@ -33,23 +33,27 @@ def build_parser():
         help="Number of jobs to run in parallel",
     )
 
-    def date(s):
-        return datetime.datetime.strptime(s, "%Y-%m-%d").date()
+    dateparser_settings = {
+        "PREFER_DAY_OF_MONTH": "first",
+    }
+    def date(s, settings=dateparser_settings):
+        # dateparser parses plus as minus for some reason
+        s = re.sub(r"[+]", " in ", s)
+        return dateparser.parse(s, settings=settings)
 
-    # TODO: parse time delta on command line
     parser.add_argument(
         "--start",
         type=date,
-        metavar="YYYY-MM-DD",
-        default=datetime.date.today(),
+        metavar="TIMESPEC",
+        default="+45days",
         help="Start date of earnings reports",
     )
 
     parser.add_argument(
         "--end",
         type=date,
-        metavar="YYYY-MM-DD",
-        default=datetime.date.today() + datetime.timedelta(days=90),
+        metavar="TIMESPEC",
+        default="+90days",
         help="End date of earnings reports",
     )
 
