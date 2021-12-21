@@ -41,4 +41,20 @@ def evaluate(stock):
     if 2 * ec_past.iloc[0]["epsactual"] < ec_past.iloc[1]["epsactual"]:
         return False
 
+
+    # Calculate positive/negative sigma
+    prices = stock.history(period="3mo", interval="1d")
+    prices = prices.asfreq("15D", method="pad")
+
+    prices.index.sort_values()
+
+    close = prices["Close"]
+
+    mean = close.rolling(window=len(close)).mean().iloc[-1]
+    stddev = close.std()
+
+    plus_sigma = mean + stddev
+    minus_sigma = mean - stddev
+
+
     return True
