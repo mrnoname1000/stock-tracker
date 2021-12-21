@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 
-from . import option, data, yahoo, types
+from . import option, data, yahoo
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     pd.set_option("display.max_columns", None)
 
 
-    stocks = [types.Stock(s) for s in yahoo.get_stocks_with_earnings_between(opts.start, opts.end)]
+    stocks = [yahoo.Stock(s) for s in yahoo.get_stocks_with_earnings_between(opts.start, opts.end)]
 
     for stock in stocks:
         if data.evaluate(stock):
