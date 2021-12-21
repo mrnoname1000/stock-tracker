@@ -27,9 +27,6 @@ class YahooEarningsCalendar(_YahooEarningsCalendar):
         return super()._get_data_dict(url, **headers)
 
 
-yec = YahooEarningsCalendar()
-
-
 def trim_constants(earnings_report, constants=EARNINGS_CONSTANT_KEYS):
     for key in constants:
         if key in earnings_report:
@@ -48,6 +45,7 @@ def earnings_to_df(report):
 
 
 def get_stock_earnings_data_between(start, end):
+    yec = YahooEarningsCalendar()
     reports = {}
 
     reports_l = yec.earnings_between(start, end)
@@ -65,6 +63,8 @@ def get_stock_earnings_data_between(start, end):
 
 
 def populate_earnings_df(ticker, earnings):
+    yec = YahooEarningsCalendar()
+
     reports_l = yec.get_earnings_of(ticker)
 
     for report in reports_l:
