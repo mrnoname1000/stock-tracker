@@ -25,18 +25,20 @@ def zero_if_nan(x):
     return np.where(np.isnan(x), 0, x)
 
 
-def evaluate(df):
-    df.index.sort_values()
+def evaluate(stock):
+    ec = stock.earnings_calendar
+
+    ec.index.sort_values()
 
     # Ignore future reports
-    df_past = df.loc[df["epsactual"].notna()]
+    ec_past = ec.loc[ec["epsactual"].notna()]
 
     # Ignore brand-new stocks
-    if len(df_past) < 2:
+    if len(ec_past) < 2:
         return False
 
     # Guarantee MRQ earnings gain of >= 100%
-    if 2 * df_past.iloc[0]["epsactual"] < df_past.iloc[1]["epsactual"]:
+    if 2 * ec_past.iloc[0]["epsactual"] < ec_past.iloc[1]["epsactual"]:
         return False
 
     return True

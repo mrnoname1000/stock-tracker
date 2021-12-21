@@ -10,12 +10,6 @@ from yahoo_earnings_calendar import YahooEarningsCalendar as _YahooEarningsCalen
 from . import threading
 
 
-EARNINGS_CONSTANT_KEYS = [
-    "ticker",
-    "companyshortname",
-]
-
-
 class YahooEarningsCalendar(_YahooEarningsCalendar):
     def __init__(self):
         self.delay = 0
@@ -27,84 +21,7 @@ class YahooEarningsCalendar(_YahooEarningsCalendar):
         return super()._get_data_dict(url, **headers)
 
 
-def trim_constants(earnings_report, constants=EARNINGS_CONSTANT_KEYS):
-    for key in constants:
-        if key in earnings_report:
-            del earnings_report[key]
-
-
-def earnings_to_df(report):
-    report = report.copy()
-    trim_constants(report)
-
-    startdatetime = pd.to_datetime(report.pop("startdatetime"))
-
-    df = pd.DataFrame(index=[startdatetime], data=report)
-
-    return df
-
-
-def get_stock_earnings_data_between(start, end):
-    yec = YahooEarningsCalendar()
-    reports = {}
-
-    reports_l = yec.earnings_between(start, end)
-
-    for report in reports_l:
-        ticker = report["ticker"]
-        df = earnings_to_df(report)
-
-        if ticker in reports:
-            reports[ticker] = pd.concat([reports[ticker], df])
-        else:
-            reports[ticker] = df
-
-    return reports
-
-
 def get_stocks_with_earnings_between(start, end):
     yec = YahooEarningsCalendar()
 
     return [e["ticker"] for e in yec.earnings_between(start, end)]
-
-
-def populate_earnings_df(ticker, earnings):
-    yec = YahooEarningsCalendar()
-
-    reports_l = yec.get_earnings_of(ticker)
-
-    for report in reports_l:
-        trim_constants(report)
-
-        startdatetime = pd.to_datetime(report.pop("startdatetime"))
-
-        earnings.loc[startdatetime] = report
-
-
-def get_stock_data(*symbols):
-    data = pd.DataFrame()
-
-    @sleep_and_retry
-    @limits(calls=5, period=1)
-    @limits(calls=2000, period=60 * 60)
-    def get_ticker(symbol):
-        symbol = symbol.upper()
-
-        ticker = yf.Ticker(symbol)
-        with suppress(KeyError):
-            ticker.get_info()
-
-        return ticker
-
-    # this can take a while, so show a progress bar
-    for ticker in tmap(get_ticker, symbols):
-        symbol = ticker.ticker
-        info = ticker.info
-
-        # we don't want lists as values
-        info = {k: v for k, v in info.items() if not isinstance(v, list)}
-
-        df = pd.DataFrame(index=[symbol], data=info)
-        data = pd.concat([data, df])
-
-    return data
