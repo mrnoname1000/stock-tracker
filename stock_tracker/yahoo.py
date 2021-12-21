@@ -62,4 +62,4 @@ class Stock(yf.Ticker):
 def get_stocks_with_earnings_between(start, end):
     yec = YahooEarningsCalendar()
 
-    return [e["ticker"] for e in yec.earnings_between(start, end)]
+    return {e["ticker"] for e in yec.earnings_between(start, end)}
