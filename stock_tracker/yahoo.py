@@ -62,6 +62,12 @@ def get_stock_earnings_data_between(start, end):
     return reports
 
 
+def get_stocks_with_earnings_between(start, end):
+    yec = YahooEarningsCalendar()
+
+    return [e["ticker"] for e in yec.earnings_between(start, end)]
+
+
 def populate_earnings_df(ticker, earnings):
     yec = YahooEarningsCalendar()
 
