@@ -57,4 +57,36 @@ def evaluate(stock):
     minus_sigma = mean - stddev
 
 
+    # more filters
+    # TODO: Weight this one
+    if stock.info["marketCap"] < 10 ** 9:
+        return False
+
+    # TODO: check if volume is 10-day average
+    if stock.info["volume"] < 150000:
+        return False
+
+    trailingpe = stock.info.get("trailingPE")
+    if trailingpe is None:
+        trailingpe = stock.info["currentPrice"] / stock.info["trailingEps"]
+
+    if trailingpe > 25:
+        return False
+
+    if stock.info.get("forwardPE", 0) > 20:
+        return False
+
+    if stock.info.get("returnOnEquity", 0) < 0.2:
+        return False
+
+    if stock.info.get("debtToEquity", 0) > 50:
+        return False
+
+    if stock.info.get("profitMargins", 0) < 0.2:
+        return False
+
+    if stock.info.get("grossMargins", 0) < 0.35:
+        return False
+
+
     return True
