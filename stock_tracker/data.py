@@ -1,3 +1,5 @@
+from math import inf
+
 import numpy as np
 import pandas as pd
 
@@ -21,6 +23,10 @@ def evaluate(stock):
 
     # Calculate positive/negative sigma
     prices = stock.history(period="3mo", interval="1d")
+
+    if prices.empty:
+        return False
+
     prices = prices.asfreq("15D", method="pad")
 
     prices.index.sort_values()
@@ -36,7 +42,8 @@ def evaluate(stock):
 
     # more filters
     # TODO: Weight this one
-    if stock.info["marketCap"] < 10 ** 9:
+    mcap = stock.info.get("marketCap", inf)
+    if mcap < 10 ** 9:
         return False
 
     # TODO: check if volume is 10-day average
@@ -53,7 +60,8 @@ def evaluate(stock):
     if stock.info.get("forwardPE", 0) > 20:
         return False
 
-    if stock.info.get("returnOnEquity", 0) < 0.2:
+    roe = stock.info.get("returnOnEquity", inf)
+    if roe < 0.2:
         return False
 
     if stock.info.get("debtToEquity", 0) > 50:
