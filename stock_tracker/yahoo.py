@@ -18,6 +18,7 @@ EARNINGS_CONSTANT_KEYS = [
 
 class YahooEarningsCalendar(_YahooEarningsCalendar):
     def __init__(self):
+        super().__init__()
         self.delay = 0
 
     @sleep_and_retry
