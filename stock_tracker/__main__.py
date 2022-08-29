@@ -14,7 +14,11 @@ def main():
     pd.set_option("display.max_columns", None)
 
 
-    stocks = [yahoo.Stock(s) for s in yahoo.get_stocks_with_earnings_between(opts.start, opts.end)]
+    if opts.lookup:
+        tickers = yahoo.get_stocks_with_earnings_between(opts.start, opts.end)
+    else:
+        tickers = opts.stocks
+    stocks = [yahoo.Stock(t) for t in tickers]
 
     for stock in stocks:
         print("Evaluating", stock.ticker)
