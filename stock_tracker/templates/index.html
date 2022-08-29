@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Oliver's Stock Tracker{% endblock %}
+{% block content %}
+	<h1>Oliver's Stock Tracker</h1>
+	{% if tickers or error %}
+		{% if error %}
+			<h2>An error occured:</h2>
+			<code><pre>{{ error | nl2br }}</pre></code>
+		{% else %}
+			{% for ticker, status in tickers.items() %}
+				<strong>{{ ticker }}</strong>
+				{% if status %}passed{% else %}failed{% endif %}
+				evaluation.
+			{% endfor %}
+		{% endif %}
+		<h2>Try again with different tickers below</h2>
+	{% else %}
+		<h2>Submit tickers for analysis below</h2>
+	{% endif %}
+	<form>
+		<div>
+			<label for="tickers">Tickers:</label>
+			<input type="text" name="tickers" id="tickers" required>
+		</div>
+	</form>
+{% endblock %}
