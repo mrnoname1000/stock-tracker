@@ -1,6 +1,7 @@
-import sys
+import sys, traceback
 import pandas as pd
 
+from yahoo_earnings_calendar import CalendarError
 from . import option, data, yahoo
 
 
@@ -16,8 +17,13 @@ def main():
     stocks = [yahoo.Stock(s) for s in yahoo.get_stocks_with_earnings_between(opts.start, opts.end)]
 
     for stock in stocks:
-        if data.evaluate(stock):
-            print(stock.ticker)
+        print("Evaluating", stock.ticker)
+        try:
+            if data.evaluate(stock):
+                print(stock.ticker)
+        except (KeyError, ValueError, CalendarError, TypeError) as e:
+            traceback.print_exc(file=sys.stderr)
+            print("Exception caught, continuing...", file=sys.stderr)
 
     return 0
 
