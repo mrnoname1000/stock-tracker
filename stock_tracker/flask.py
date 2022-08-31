@@ -1,7 +1,6 @@
 import re, traceback
 
 from flask import Flask, request, render_template, Blueprint
-from flask_htmlmin import HTMLMIN
 
 try:
 	from jinja2.utils import markupsafe
@@ -16,8 +15,6 @@ from . import yahoo, data
 from .constants import PROGNAME
 
 app = Flask(PROGNAME, template_folder="stock_tracker/templates")
-app.config['MINIFY_HTML'] = True
-htmlmin = HTMLMIN(app)
 
 @app.route("/")
 def index():
